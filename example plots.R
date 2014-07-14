@@ -1,20 +1,23 @@
-#==================run these once to install==================
+#==================run this each new R session==================
+packages <- c("ggplot2", "reshape2", "hexbin", "quantreg", "matrixStats", "scales", "RColorBrewer", "grid")
 
-install.packages("ggplot2",dep=TRUE)
-install.packages("reshape2",dep=TRUE)
-install.packages("hexbin",dep=TRUE)
-install.packages("quantreg",dep=TRUE)
-install.packages("matrixStats",dep=TRUE)
-install.packages("scales",dep=TRUE)
-install.packages("RColorBrewer",dep=TRUE)
+#force install new packages
+#install.packages(packages,dep=TRUE)
 
-#==================run these each new R session==================
-library(ggplot2)		
-library(reshape2)
-library(matrixStats)
-library(scales)
-library(grid)
-library(RColorBrewer) 	#for a list of palettes, run: display.brewer.all()
+#ipak from stevenworthington / GitHub
+# ipak function: install and load multiple R packages.
+# check to see if packages are installed. Install them if they are not, then load them into the R session.
+ 
+ipak <- function(pkg){
+    new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+    if (length(new.pkg)) 
+        install.packages(new.pkg, dependencies = TRUE)
+    sapply(pkg, require, character.only = TRUE)
+}
+ipak(packages)
+
+#display.brewer.all()
+
 #also load the cellProfiles function by executing the entire 'cell profiles function' file
 
 #================================================================

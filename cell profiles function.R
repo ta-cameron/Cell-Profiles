@@ -59,6 +59,19 @@ cellProfiles <- function(data=NULL,position="center",align="native",reverse=FALS
 #
 #END USER GUIDE
 #============================
+
+#============================
+#DEBUG tools
+#
+#data <- raw_table
+#position <- "center"
+#align <- "native"
+#reverse <- FALSE
+#contrast <- "norm"
+#range <- c(0.02,0.98)
+#
+#============================
+
 	t0<-proc.time()
 
 	#set up a few variables
@@ -67,15 +80,15 @@ cellProfiles <- function(data=NULL,position="center",align="native",reverse=FALS
 		cat("ERROR: Range must be between 0 and 1, in the format: c(min,max).");return(NULL)
 	}
 	if (position=="left"){adj_tick<-5} else {adj_tick<-6}
-	cmin<-range[1]
-	cmax<-range[2]
-	ncol<-ncol(data)/2
-	nrow<-nrow(data)
-	dlength<-data[seq(1,ncol*2,by=2)]
-	profile<-data[seq(2,ncol*2,by=2)]
-	maxlength<-ceiling(max(dlength,na.rm=TRUE))
-	wtmeanleft<-log((50:5)/5)/log(10)
-	wtmeanright<-log((5:50)/5)/log(10)
+	cmin <- range[1]
+	cmax <- range[2]
+	ncol <- ncol(data)/2
+	nrow <- nrow(data)
+	dlength <- data[seq(1,ncol*2,by=2)]
+	profile <- data[seq(2,ncol*2,by=2)]
+	maxlength <- ceiling(max(dlength,na.rm=TRUE))
+	wtmeanleft <- log((50:5)/5)/log(10)
+	wtmeanright <- log((5:50)/5)/log(10)
 	
 	#sets up profile fliplist, or preserves prior orientations & disables inappropriate flags
 	if (align == "reuse"){
@@ -96,15 +109,17 @@ cellProfiles <- function(data=NULL,position="center",align="native",reverse=FALS
 	
 	#perform contrast adjustments and aligns or randomizes data as set in the options above
 	cat("Calculating: \n ..")
-	tick<-txtProgressBar(min=1,max=ncol*adj_tick,style=3)
-	tmp_profile<-profile
+	tick <- txtProgressBar(min=1,max=ncol*adj_tick,style=3)
+	tmp_profile <- profile
 	for(ii in 1:ncol){
 		#for orient flag, find out if the top half of the column is brighter than the bottom half
 		#if not, then set fliplist[ii] to 1 so the column will be reversed
-		real_rows<-colCounts(as.matrix(profile[ii]+1),na.rm=TRUE)
-		half_rows<-round(real_rows/2)
+		#DEBUG
+		# ii <- 1
+		real_rows <- nrow(na.omit(profile[ii]))
+		half_rows <- round(real_rows/2)
 		if ((align == "orient") && mean(profile[1:half_rows,ii]*approx(wtmeanleft,n=half_rows)$y) < mean(profile[(real_rows-half_rows+1):real_rows,ii]*approx(wtmeanright,n=half_rows)$y)){
-			cellProfilesFunctionEnvironment.env$fliplist[ii]<-0
+			cellProfilesFunctionEnvironment.env$fliplist[ii] <- 0
 		}
 		if ((reverse == TRUE) && (align != "reuse")){
 			cellProfilesFunctionEnvironment.env$fliplist[ii]<-(cellProfilesFunctionEnvironment.env$fliplist[ii]-1)/-1
@@ -118,43 +133,43 @@ cellProfiles <- function(data=NULL,position="center",align="native",reverse=FALS
 		
 		#col_min & max are used to adjust contrast when max contrast is called		
 		if (contrast != "max"){
-			col_min<-0
-			col_max<-1
+			col_min <- 0
+			col_max <- 1
 		}	else {
-			col_min<-min(profile[ii],na.rm=TRUE)	
-			col_max<-max(profile[ii],na.rm=TRUE)-col_min
+			col_min <- min(profile[ii],na.rm=TRUE)	
+			col_max <- max(profile[ii],na.rm=TRUE)-col_min
 		}
 		
 		#save flipped/reversed/contrast adjusted values into tmp_profile, as appropriate 
 		if (cellProfilesFunctionEnvironment.env$fliplist[ii]==1) {
-			tmp_profile[c(real_rows:1),ii]<-(profile[c(1:real_rows),ii]-col_min)/(col_max)
+			tmp_profile[c(real_rows:1),ii] <- (profile[c(1:real_rows),ii]-col_min)/(col_max)
 		} else {
-			tmp_profile[c(1:real_rows),ii]<-(profile[c(1:real_rows),ii]-col_min)/(col_max)
+			tmp_profile[c(1:real_rows),ii] <- (profile[c(1:real_rows),ii]-col_min)/(col_max)
 		}
 		setTxtProgressBar(tick,ii)
 	}
-	profile<-tmp_profile	
+	profile <- tmp_profile
 	
 	
 
     #find maximum length of each column, and the number of real values in each column
     #then order cells by measured cell length values
-	cellength<-{}
-	collength<-{}
+	cellength <- {}
+	collength <- {}
 	for(i in 1:ncol){
-		cellength[i]<-max(dlength[i],na.rm=TRUE)
+		cellength[i] <- max(dlength[i],na.rm=TRUE)
 	}
 	for(i in 1:ncol){
-		collength[i]<-colCounts(as.matrix(profile[i]+1),na.rm=TRUE)
+		collength[i] <- nrow(na.omit(profile[i]))
 	}
 	setTxtProgressBar(tick,2*ncol)
-	collength<-order(cellength)
+	collength <- order(cellength)
 	
 	#setup the y values to stack each profile
-	plotheight<-{}
+	plotheight <- {}
 	for(i in 1:ncol){
-		temp<-rep(i,nrow)
-		plotheight<-append(plotheight,temp)
+		temp <- rep(i,nrow)
+		plotheight <- append(plotheight,temp)
 	}
 	setTxtProgressBar(tick,3*ncol)
 	
@@ -163,8 +178,8 @@ cellProfiles <- function(data=NULL,position="center",align="native",reverse=FALS
 	#shifts cells to center (if center = TRUE)
 	if (position == "center"){
 		for(ii in 1:ncol){
-			col_adj<-(max(dlength[ii],na.rm=TRUE)+min(dlength[ii],na.rm=TRUE))/2
-			dlength[ii]<-dlength[ii]-col_adj
+			col_adj <- (max(dlength[ii],na.rm=TRUE)+min(dlength[ii],na.rm=TRUE))/2
+			dlength[ii] <- dlength[ii]-col_adj
 		}
 	}
 	setTxtProgressBar(tick,(adj_tick-2)*ncol)
@@ -172,27 +187,27 @@ cellProfiles <- function(data=NULL,position="center",align="native",reverse=FALS
 	
 	
 	#apply order info from above
-	or_dlength<-melt(dlength[collength],id=NULL)
-	or_profile<-melt(profile[collength],id=NULL)
-	or_dtable<-cbind(or_dlength,plotheight,or_profile[2])
-	names(or_dtable)<- c("cell","x","y","intensity")
+	or_dlength <- melt(dlength[collength],id=NULL)
+	or_profile <- melt(profile[collength],id=NULL)
+	or_dtable <- cbind(or_dlength,plotheight,or_profile[2])
+	names(or_dtable) <- c("cell","x","y","intensity")
 	
 	
 	
-	max<-max(or_dtable["intensity"],na.rm=TRUE)
-	min<-min(or_dtable["intensity"],na.rm=TRUE)
-	med<-median(as.matrix(or_dtable["intensity"]),na.rm=TRUE)
-	mid<-(max-min)/2+min
+	max <- max(or_dtable["intensity"],na.rm=TRUE)
+	min <- min(or_dtable["intensity"],na.rm=TRUE)
+	med <- median(as.matrix(or_dtable["intensity"]),na.rm=TRUE)
+	mid <- (max-min)/2+min
 	
 	
 	
 	#simple code to breakdown the long data list into something human-readable
-	fodframe<-as.data.frame(or_profile[1:nrow,2])
-	colnames(fodframe)<-or_profile[1,1]
+	fodframe <- as.data.frame(or_profile[1:nrow,2])
+	colnames(fodframe) <- or_profile[1,1]
 	for(c in 2:ncol){
-		odframe<-as.data.frame(or_profile[(1:nrow)+(c-1)*nrow,2])
-		colnames(odframe)<-or_profile[(nrow*c),1]
-		fodframe<-cbind(fodframe,odframe)
+		odframe <- as.data.frame(or_profile[(1:nrow)+(c-1)*nrow,2])
+		colnames(odframe) <- or_profile[(nrow*c),1]
+		fodframe <- cbind(fodframe,odframe)
 	}		
 	setTxtProgressBar(tick,(adj_tick-1)*ncol)
 	fodframe <- round(fodframe*1000)/1000
@@ -200,38 +215,38 @@ cellProfiles <- function(data=NULL,position="center",align="native",reverse=FALS
 	
 	
 	#prepared a list suitable for making x-y scatter plots (x-axis converted to proportion of cell length)
-	or_dlength<-dlength[collength]
+	or_dlength <- dlength[collength]
 	for(i in 1:ncol){
-		or_dlength[i]<-rescale(or_dlength[i])
+		or_dlength[i] <- rescale(or_dlength[i])
 	}
 	setTxtProgressBar(tick,(adj_tick)*ncol)
 	close(tick)
-	or_dlength<-melt(or_dlength,id=NULL)
-	por_dtable<-cbind(or_dlength,plotheight,or_profile[2])
-	names(por_dtable)<- c("cell","x","y","intensity")
+	or_dlength <- melt(or_dlength,id=NULL)
+	por_dtable <- cbind(or_dlength,plotheight,or_profile[2])
+	names(por_dtable) <- c("cell","x","y","intensity")
 	
 	
 	
 	#eliminate empty rows
-	or_dtable<-or_dtable[!is.na(or_dtable[4])==TRUE,c(1:4)]
+	or_dtable <- or_dtable[!is.na(or_dtable[4])==TRUE,c(1:4)]
 	
 	
 	#create contrast-truncated version
-	lim_or_dtable<-or_dtable	
-	lim_min<-colQuantiles(or_dtable["intensity"],cmin,na.rm=TRUE)
-	lim_max<-colQuantiles(or_dtable["intensity"],cmax,na.rm=TRUE)
-	cmin_count<-length(lim_or_dtable$intensity[lim_or_dtable$intensity<lim_min])
-	cmax_count<-length(lim_or_dtable$intensity[lim_or_dtable$intensity>lim_max])
-	lim_or_dtable[lim_or_dtable["intensity"]<lim_min,"intensity"]<-lim_min
-	lim_or_dtable[lim_or_dtable["intensity"]>lim_max,"intensity"]<-lim_max
-	len_count<-length(lim_or_dtable$intensity)
+	lim_or_dtable <- or_dtable	
+	lim_min <- colQuantiles(or_dtable["intensity"],cmin,na.rm=TRUE)
+	lim_max <- colQuantiles(or_dtable["intensity"],cmax,na.rm=TRUE)
+	cmin_count <- length(lim_or_dtable$intensity[lim_or_dtable$intensity<lim_min])
+	cmax_count <- length(lim_or_dtable$intensity[lim_or_dtable$intensity>lim_max])
+	lim_or_dtable[lim_or_dtable["intensity"]<lim_min,"intensity"] <- lim_min
+	lim_or_dtable[lim_or_dtable["intensity"]>lim_max,"intensity"] <- lim_max
+	len_count <- length(lim_or_dtable$intensity)
 	cat(len_count-cmin_count-cmax_count," profile points (",round(1000*(len_count-cmin_count-cmax_count)/len_count)/10,"%) fall in the range between the lower (",round(100*lim_min[[1]])/100,") and upper (",round(100*lim_max[[1]])/100,") contrast limits.\n",sep="")
 	
 	
 	
 	profileResults <- list("or_dtable"=or_dtable, "lim_or_dtable"=lim_or_dtable, "data"=data, "form_dtable"=fodframe, "prop_dtable"=por_dtable, "ncol"=ncol, "nrow"=nrow, "max"=max, "min"=min, "med"=med, "mid"=mid, "maxlength"=maxlength)
 	
-	tf<-proc.time()-t0
+	tf <- proc.time()-t0
 	cat("Calculations on",ncol,"cells complete in",tf[["elapsed"]],"seconds.")
 	
 	return(profileResults)
@@ -265,12 +280,12 @@ cellProfileTruncate <- function(data=NULL,adjust){
 	tmp_dtable<-matrix(NA,nrow(data),ncol(data))
 	
 	#it is pretty easy to lop off the top of the table
-	data<-data[1+adjust:nrow(data),]
+	data <- data[1+adjust:nrow(data),]
 	
 	#however, taking off the bottom rows from each column (of different lengths) is rather more complicated
 	#below is an optimized form of a for loop that would copy, 2 columns at a time, all but the bottom [adjust] row(s)
 	for(i in seq(1,ncol(data),by=2)){
-		tmp_dtable[1:(nrow(as.matrix(data[!is.na(data[,i]),c(i)]))-adjust),c(i,i+1)]<-as.matrix(data[1:(nrow(as.matrix(data[!is.na(data[,i]),c(i)]))-adjust),c(i,i+1)])
+		tmp_dtable[1:(nrow(as.matrix(data[!is.na(data[,i]),c(i)]))-adjust),c(i,i+1)] <- as.matrix(data[1:(nrow(as.matrix(data[!is.na(data[,i]),c(i)]))-adjust),c(i,i+1)])
 	}
 	return(as.data.frame(tmp_dtable))
 }

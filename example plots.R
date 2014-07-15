@@ -258,6 +258,43 @@ print(pt17,vp=vplayout(3,1))
 print(pt18,vp=vplayout(3,2))
 
 #================================================================
+#19 & 20 - two-color colocalization
+#================================================================
+
+# first load two data sets [NOT SHOWN]
+# next run the cell profiles function for each of them
+# here I am simply reusing the same data set, but oriented to the left or right
+# obviously you will not want to *exactly* copy this to compare two *different* data sets 
+
+# the range / contrast of each channel will need to be carefully adjusted
+profileResults1 <- cellProfiles(data=raw_table,contrast="norm", align="orient", range=c(0.06,0.98))
+profileResults2 <- cellProfiles(data=raw_table,contrast="norm",align="orient", reverse=TRUE, range=c(0.06,0.98))
+
+#rescale intensities to 0-1
+profileResults1$lim_or_dtable$r <- rescale(profileResults1$lim_or_dtable$intensity)
+profileResults1$lim_or_dtable$g <- rescale(profileResults2$lim_or_dtable$intensity)
+
+#troubleshooting
+# if your two data sets do not have exactly the same number of points, you will get issues and errors!
+# it may help to look at the final data sets, which can be exported in wide-format with the code below
+# write.csv(as.matrix(profileResults1$lim_or_dtable$r), file="profile table 1 (red).csv")
+# write.csv(as.matrix(profileResults2$lim_or_dtable$g), file="profile table 2 (green).csv")
+
+#straight red/green probably works best, as straight blue too closely matches the black background
+pt19 <- ggplot() + layer(data=profileResults1$lim_or_dtable, mapping=aes(x=x,y=y/profileResults1$ncol, fill=rgb(r,g,0), color=rgb(r,g,0)), geom="tile", width=1.01*(profileResults1$data[2,1]-profileResults1$data[1,1]), size=0.25) + scale_y_continuous(expand=c(0,0), breaks=seq(0,1,0.25), trans="reverse") + theme_bw() + scale_fill_identity() + scale_color_identity() + labs(x="distance from midcell (μm)", y="fraction of cell cycle", title="19- red/green colocalization")
+
+#alternate light blue / orange colors for a more color-blind friendly palette
+# in case you don't want to be evil
+pt20 <- ggplot() + layer(data=profileResults1$lim_or_dtable, mapping=aes(x=x,y=y/profileResults1$ncol, fill=rgb(r,(0.5*g+0.5*r),g), color=rgb(r,(0.5*g+0.5*r),g)), geom="tile", width=1.01*(profileResults1$data[2,1]-profileResults1$data[1,1]), size=0.25) + scale_y_continuous(expand=c(0,0), breaks=seq(0,1,0.25), trans="reverse") + theme_bw() + scale_fill_identity() + scale_color_identity() + labs(x="distance from midcell (μm)", y="fraction of cell cycle", title="20- blue/orange colocalization")
+
+dev.new(width=7,height=3.25)
+grid.newpage()
+pushViewport(viewport(layout=grid.layout(1,2, heights = unit(c(3),"null"))))
+grid.text("Two-color colocalization graphs", vp=viewport(layout.pos.row=1,layout.pos.col=1:2),gp=gpar(fontsize=16))
+print(pt19,vp=vplayout(2,1))
+print(pt20,vp=vplayout(2,2))
+
+#================================================================
 # the following graphs are for documentation purposes only
 #================================================================
 # g<-g + theme_bw(base_size=10)
@@ -325,7 +362,7 @@ print(pt18,vp=vplayout(3,2))
 
 # pt20<-ggplot() + layer(data=profileResults$lim_or_dtable, mapping=aes(x=x,y=y/profileResults$ncol, fill=intensity, color=intensity), geom="tile", width=1.01*(profileResults$data[2,1]-profileResults$data[1,1]), size=0.25) + scale_y_continuous(expand=c(0,0), breaks=seq(0,1,0.25), trans="reverse") + theme_bw() + scale_fill_gradientn(colours=rev(brewer.pal(9, "YlGnBu"))) + scale_color_gradientn(colours=rev(brewer.pal(9,"YlGnBu"))) + labs(x="distance from midcell (um)", y="fraction of cell cycle",title="light background")
 
-# dev.new(width=8,height=3)
+# dev.new(width=7,height=3)
 # grid.newpage()
 # pushViewport(viewport(layout=grid.layout(1,2)))
 # print(pt19,vp=vplayout(1,1))

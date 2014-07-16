@@ -276,6 +276,7 @@ profileResults1$lim_or_dtable$g <- rescale(profileResults2$lim_or_dtable$intensi
 
 #troubleshooting
 # if your two data sets do not have exactly the same number of points, you will get issues and errors!
+# MicrobeTracker occassionally produces such errors, so double check your data carefully if you use it.
 # it may help to look at the final data sets, which can be exported in wide-format with the code below
 # write.csv(as.matrix(profileResults1$lim_or_dtable$r), file="profile table 1 (red).csv")
 # write.csv(as.matrix(profileResults2$lim_or_dtable$g), file="profile table 2 (green).csv")
@@ -289,7 +290,7 @@ pt20 <- ggplot() + layer(data=profileResults1$lim_or_dtable, mapping=aes(x=x,y=y
 
 dev.new(width=7,height=3.25)
 grid.newpage()
-pushViewport(viewport(layout=grid.layout(1,2, heights = unit(c(3),"null"))))
+pushViewport(viewport(layout=grid.layout(2,2, heights = unit(c(0.25,3),"null"))))
 grid.text("Two-color colocalization graphs", vp=viewport(layout.pos.row=1,layout.pos.col=1:2),gp=gpar(fontsize=16))
 print(pt19,vp=vplayout(2,1))
 print(pt20,vp=vplayout(2,2))

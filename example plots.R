@@ -1,5 +1,5 @@
 #==================run this each new R session==================
-packages <- c("ggplot2", "reshape2", "hexbin", "quantreg", "matrixStats", "scales", "RColorBrewer", "grid")
+packages <- c("ggplot2", "reshape2", "hexbin", "quantreg", "scales", "RColorBrewer", "grid")
 
 #force install new packages
 #install.packages(packages,dep=TRUE)

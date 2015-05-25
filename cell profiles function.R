@@ -1,6 +1,6 @@
 cellProfiles <- function(data=NULL,position="center",align="native",reverse=FALSE,contrast="native",range=c(0.02,0.98)){
 #============================
-#VERSION 2.4
+#VERSION 2.4.2
 #USER GUIDE
 #
 #Command line variables
@@ -63,13 +63,12 @@ cellProfiles <- function(data=NULL,position="center",align="native",reverse=FALS
 #============================
 #DEBUG tools
 #
-#data <- raw_table
-#position <- "center"
-#align <- "native"
-#reverse <- FALSE
-#contrast <- "norm"
-#range <- c(0.02,0.98)
-#
+# data <- raw_table
+# position <- "center"
+# align <- "native"
+# reverse <- FALSE
+# contrast <- "norm"
+# range <- c(0.02,0.98)
 #============================
 
 	t0<-proc.time()
@@ -233,8 +232,8 @@ cellProfiles <- function(data=NULL,position="center",align="native",reverse=FALS
 	
 	#create contrast-truncated version
 	lim_or_dtable <- or_dtable	
-	lim_min <- colQuantiles(or_dtable["intensity"],cmin,na.rm=TRUE)
-	lim_max <- colQuantiles(or_dtable["intensity"],cmax,na.rm=TRUE)
+	lim_min <- quantile(or_dtable["intensity"],cmin,na.rm=TRUE)[[1]]
+	lim_max <- quantile(or_dtable["intensity"],cmax,na.rm=TRUE)[[1]]
 	cmin_count <- length(lim_or_dtable$intensity[lim_or_dtable$intensity<lim_min])
 	cmax_count <- length(lim_or_dtable$intensity[lim_or_dtable$intensity>lim_max])
 	lim_or_dtable[lim_or_dtable["intensity"]<lim_min,"intensity"] <- lim_min
@@ -290,9 +289,9 @@ cellProfileTruncate <- function(data=NULL,adjust){
 	return(as.data.frame(tmp_dtable))
 }
 
+
 library(ggplot2)  	
 library(reshape2)
-library(matrixStats)
 library(scales)
 library(grid)
 library(RColorBrewer)

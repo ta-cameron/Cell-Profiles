@@ -1,16 +1,16 @@
 cellProfiles <- function(data=NULL,position="center",align="native",reverse=FALSE,contrast="native",range=c(0.02,0.98)){
 #============================
-#VERSION 2.4.2
+#VERSION 2.5
 #USER GUIDE
 #
 #Command line variables
 # Change the behavior of this function by defining these variables when calling it
 #
-# 		eg: profileResults <- cellProfiles(data=dtable,align="orient",reverse=TRUE,contrast="normx")
+# 		eg: profileResults <- cellProfiles(data=dtable,align="orient",reverse=TRUE,contrast="norm")
 #		The above command would use the data "dtable" to produce a graph with:
-#			1) cells automatically aligned with the brightest sides [orient]
-#			2) on the *left* [reverse]
-#			3) while applying the normalize function (maximum ratio enforced via truncation) [normx]
+#			1) cells automatically aligned with the brightest halves to one side [orient]
+#			2) and make this side the *left* instead of the right [reverse]
+#			3) while applying the normalize function (divide each cell profile by its mean value) [norm]
 #
 # data-handling options
 #  position = "center" or "left"
@@ -216,8 +216,8 @@ cellProfiles <- function(data=NULL,position="center",align="native",reverse=FALS
 	#prepared a list suitable for making x-y scatter plots (x-axis converted to proportion of cell length)
 	or_dlength <- dlength[collength]
 	for(i in 1:ncol){
-		or_dlength[i] <- rescale(or_dlength[i])
-	}
+		or_dlength[i] <- rescale(or_dlength[i], to=c(0,1), from =range(or_dlength[i], na.rm=TRUE))
+	}	
 	setTxtProgressBar(tick,(adj_tick)*ncol)
 	close(tick)
 	or_dlength <- melt(or_dlength,id=NULL)

@@ -9,7 +9,17 @@ Install directly from Github using the devtools package:
 install.packages("devtools")
 library(devtools)
 devtools::install_github("ta-cameron/Cell-Profiles")
+library(cellProfiles)
 ```
+
+Note, if you want to install with the vignette (recommended), you'll need:
+```R
+install.packages("devtools")
+library(devtools)
+devtools::install_github("ta-cameron/Cell-Profiles", build_vignettes = TRUE, dependencies=TRUE)
+library(cellProfiles)
+```
+
 
 ### Usage
 

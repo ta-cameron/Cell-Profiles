@@ -8,15 +8,20 @@ Install directly from Github using the devtools package:
 ```R
 install.packages("devtools")
 library(devtools)
+
 devtools::install_github("ta-cameron/Cell-Profiles")
 library(cellProfiles)
 ```
 
-Note, if you want to install with the vignette (recommended), you'll need:
+Note, if you want to install with the vignette (**recommended**), you'll need to load several additional packages in order to compile the vignette file:
 ```R
-install.packages("devtools")
-library(devtools)
-devtools::install_github("ta-cameron/Cell-Profiles", build_vignettes = TRUE, dependencies=TRUE)
+packages <- c("ggplot2","RColorBrewer","devtools", "Cairo", "scales", "knitr")
+install.packages(packages)
+
+packages <- c("ggplot2","RColorBrewer","devtools","Cairo","scales", "grid")
+sapply(packages, require, character.only=TRUE)
+
+devtools::install_github("ta-cameron/Cell-Profiles", build_vignettes = TRUE)
 library(cellProfiles)
 ```
 

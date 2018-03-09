@@ -1,9 +1,9 @@
 Package: cellProfiles
 Title: Generate Cell Profile Demographs 
-Version: 3.0
+Version: 3.0.1
 Authors@R: person("Todd", "Cameron", email = "tacameron@berkeley.edu", role = c("aut", "cre"))
 Description: This R package will take a series of fluorescent profiles acquired in ImageJ/Fiji (or MicrobeTracker), arrange them from shortest to longest, then use Hadley Wickam’s ggplot2 to plot the profiles out as a vertical stack. Each horizontal line represents the fluorescence intensity profile of a single cell. By ordering cells according to length, general localization patterns over the cell cycle can be easily visualized..
-Depends: R (>= 3.3.2)
+Depends: R (>= 3.4.3)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
@@ -14,5 +14,5 @@ Suggests:
 	ggplot2 (>= 2.2.1),
 	knitr (>= 1.16),
 	RColorBrewer (>= 1.1),
-	scales (>= 0.4.1)
+	scales (>= 0.5)
 VignetteBuilder: knitr

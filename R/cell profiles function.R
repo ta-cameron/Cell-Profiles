@@ -207,7 +207,10 @@ cellProfiles <- function(data=NULL, position="center", align="native", reverse=F
 	# or just on the right if not
 
 	#takes the lengths from the (first) longest cell
-	x_grid_o <- dlength[,!is.na(dlength[nrow,])][,1]
+	x_grid_o <- dlength[,!is.na(dlength[nrow,])]
+	if(typeof(x_grid_o) == "list"){
+	  x_grid_o <- dlength[,!is.na(dlength[nrow,])][,1]
+	}
 	x_grid <- seq(min(x_grid_o), max(x_grid_o), length.out=length(x_grid_o))
 	#must round after diff due to floating point error
 	x_diff <- signif(diff(x_grid), digits=10)
@@ -237,15 +240,22 @@ cellProfiles <- function(data=NULL, position="center", align="native", reverse=F
 
   if (position == "center"){
     for(ii in 1:ncol){
-      #ii <- 24
-      #ii <- 26
-       if(nrow(na.omit(dlength[ii])) %% 2 == 1){
-         offset <- 0
-       } else {
-         offset <- 1
-       }
-
-      nrow(na.omit(dlength[ii]))
+      #ii <- 1
+      #ii <- 6
+      if(nrow %% 2 == 1){
+        if(nrow(na.omit(dlength[ii])) %% 2 == 1){
+          offset <- 1
+        } else {
+          offset <- 0
+        }
+      } else {
+        if(nrow(na.omit(dlength[ii])) %% 2 == 1){
+          offset <- 0
+        } else {
+          offset <- 1
+        }
+      }
+      
       before <- ceiling( (length(x_grid)-length(dlength[!is.na(dlength[ii]), ii]) ) / 2 + offset)
       after <- length(x_grid) - ceiling( (length(x_grid)-length(dlength[!is.na(dlength[ii]), ii]) ) / 2)
 

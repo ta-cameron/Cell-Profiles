@@ -13,12 +13,15 @@ devtools::install_github("ta-cameron/Cell-Profiles")
 library(cellProfiles)
 ```
 
+**Vignette update**
+Apparently the install_github recently stopped compiling vignettes, for reasons unknown to me. TO compile the vignette, you can clone the Git repository and build the package yourself. Alternatively, the vignette can also be viewed her on GitHub in the wiki pages.  
+
 Note, if you want to install with the vignette (**recommended**), you'll need to load several additional packages in order to compile the vignette file:
 ```R
-packages <- c("ggplot2","RColorBrewer","devtools", "Cairo", "scales", "knitr")
+packages <- c("ggplot2","RColorBrewer","devtools", "scales", "knitr")
 install.packages(packages)
 
-packages <- c("ggplot2","RColorBrewer","devtools","Cairo","scales", "grid")
+packages <- c("ggplot2","RColorBrewer","devtools","scales", "grid")
 sapply(packages, require, character.only=TRUE)
 
 devtools::install_github("ta-cameron/Cell-Profiles", build_vignettes = TRUE)

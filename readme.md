@@ -14,7 +14,10 @@ library(cellProfiles)
 ```
 
 **Vignette update**
+
 Apparently the install_github recently stopped compiling vignettes, for reasons unknown to me. TO compile the vignette, you can clone the Git repository and build the package yourself. Alternatively, the vignette can also be viewed her on GitHub in the wiki pages.  
+
+**old vignette instructions**
 
 Note, if you want to install with the vignette (**recommended**), you'll need to load several additional packages in order to compile the vignette file:
 ```R

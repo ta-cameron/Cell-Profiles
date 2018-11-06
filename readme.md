@@ -15,9 +15,9 @@ library(cellProfiles)
 
 **Vignette update**
 
-Apparently the install_github recently stopped compiling vignettes, for reasons unknown to me. TO compile the vignette, you can clone the Git repository and build the package yourself. Alternatively, the vignette can also be viewed her on GitHub in the wiki pages.  
+Apparently the install_github recently stopped compiling vignettes, for reasons unknown to me. To compile the vignette, you can clone the Git repository and build the package yourself. Alternatively, the vignette can also be viewed here in this project's [wiki page](https://github.com/ta-cameron/Cell-Profiles/wiki/Vignette).  
 
-**old vignette instructions**
+**Old vignette instructions**
 
 Note, if you want to install with the vignette (**recommended**), you'll need to load several additional packages in order to compile the vignette file:
 ```R
@@ -36,8 +36,8 @@ library(cellProfiles)
 
 This package loads two functions, `cellProfiles()` and `cellProfilesTruncate()`. `cellProfiles()` is the primary function of interest, and it will prepare the raw data for graphing with `ggplot()`. It accepts ImageJ ROI “multiplot” output data (a wide table with paired length and intensity data). `cellProfilesTruncate()` is an optional helper function to trim off data points from each end of all cells. 
 
-See vignette for detailed usage examples: `vignette("cellProfiles")`
+See vignette / [wiki](https://github.com/ta-cameron/Cell-Profiles/wiki/Vignette) for detailed usage examples: `vignette("cellProfiles")`
 
 ### Changes
 
-The are some incompatible differences between the output of the older function-styled versions and the newer package version. The upside is that the new data output is more intuitively named and less complicated to graph. Additionally, the method of reusing prior profile orientations has changed. Please refer to the help file & vignette for current usage instructions.
+The are some incompatible differences between the output of the older function-styled versions and the newer package version. The upside is that the new data output is more intuitively named and less complicated to graph. Additionally, the method of reusing prior profile orientations has changed. Please refer to the help file & vignette / [wiki](https://github.com/ta-cameron/Cell-Profiles/wiki/Vignette) for current usage instructions.

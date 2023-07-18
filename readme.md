@@ -6,7 +6,7 @@ This R package will take a series of fluorescent profiles acquired in ImageJ/Fij
 
 Install directly from Github using the devtools package:
 ```R
-install.packages("devtools")
+install.packages(c("devtools","reshape2","scales"))
 library(devtools)
 
 devtools::install_github("ta-cameron/Cell-Profiles")
